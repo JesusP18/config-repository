@@ -8,7 +8,7 @@ spring:
     gateway:
       routes:
         - id: client-service
-          uri: lb://client-service
+          uri: lb://CLIENT-SERVICE
           predicates:
             - Path=/api/v1/clients/**
           filters:
@@ -22,7 +22,7 @@ spring:
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
         - id: account-service
-          uri: lb://account-service
+          uri: lb://ACCOUNT-SERVICE
           predicates:
             - Path=/api/v1/accounts/**
           filters:
@@ -36,7 +36,7 @@ spring:
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
         - id: credit-service
-          uri: lb://credit-service
+          uri: lb://CREDIT-SERVICE
           predicates:
             - Path=/api/v1/credits/**
           filters:
@@ -50,7 +50,7 @@ spring:
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
         - id: transaction-service
-          uri: lb://transaction-service
+          uri: lb://TRANSACTION-SERVICE
           predicates:
             - Path=/api/v1/transactions/**
           filters:
