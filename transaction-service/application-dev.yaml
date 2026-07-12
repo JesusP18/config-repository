@@ -1,0 +1,18 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: transaction-service
+  mongodb:
+    uri: mongodb://localhost:27017/transaction_db
+
+logging:
+  level:
+    root: INFO
+    com.transaction.service: INFO
+
+account-service:
+  url: http://localhost:8081
+
+credit-service:
+  url: http://localhost:8082

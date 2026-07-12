@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: account-service
+  mongodb:
+    uri: mongodb://localhost:27017/account_db
+
+logging:
+  level:
+    root: INFO
+    com.account.service: INFO
+
+client-service:
+  url: http://localhost:8080
