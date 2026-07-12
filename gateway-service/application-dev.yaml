@@ -5,6 +5,11 @@ spring:
   application:
     name: gateway-service
   cloud:
+    loadbalancer:
+      cache:
+        enabled: true
+      retry:
+        enabled: true
     gateway:
       routes:
         # CLIENT SERVICE
