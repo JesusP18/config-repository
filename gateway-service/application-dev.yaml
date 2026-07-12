@@ -4,11 +4,114 @@ server:
 spring:
   application:
     name: gateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - name: CircuitBreaker
+          args:
+            name: defaultCircuitBreaker
+            fallbackUri: forward:/fallback
+        - name: Retry
+          args:
+            retries: 3
+            statuses: INTERNAL_SERVER_ERROR
+            methods: GET,POST,PUT,PATCH,DELETE
+      routes:
+        # CLIENT SERVICE
+        - id: client-service
+          uri: lb://CLIENT-SERVICE
+          predicates:
+            - Path=/api/v1/clients/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: clientServiceCB
+                fallbackUri: forward:/fallback/client
 
+        # ACCOUNT SERVICE
+        - id: account-service
+          uri: lb://ACCOUNT-SERVICE
+          predicates:
+            - Path=/api/v1/accounts/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: accountServiceCB
+                fallbackUri: forward:/fallback/account
+
+        # CREDIT SERVICE
+        - id: credit-service
+          uri: lb://CREDIT-SERVICE
+          predicates:
+            - Path=/api/v1/credits/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: creditServiceCB
+                fallbackUri: forward:/fallback/credit
+
+        # TRANSACTION SERVICE
+        - id: transaction-service
+          uri: lb://TRANSACTION-SERVICE
+          predicates:
+            - Path=/api/v1/transactions/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: transactionServiceCB
+                fallbackUri: forward:/fallback/transaction
+
+# Eureka Client
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
-
   instance:
     prefer-ip-address: true
+
+# Resilience4j Circuit Breaker Configuration
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      permittedNumberOfCallsInHalfOpenState: 2
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10s
+      slowCallDurationThreshold: 2s
+      slowCallRateThreshold: 50
+      registerHealthIndicator: true
+  instances:
+    defaultCircuitBreaker:
+      baseConfig: default
+    clientServiceCB:
+      baseConfig: default
+    accountServiceCB:
+      baseConfig: default
+    creditServiceCB:
+      baseConfig: default
+    transactionServiceCB:
+      baseConfig: default
+
+# Resilience4j Timeout (2 seconds as required)
+resilience4j.timelimiter:
+  configs:
+    default:
+      timeoutDuration: 2s
+      cancelRunningFuture: false
+  instances:
+    defaultCircuitBreaker:
+      baseConfig: default
+    clientServiceCB:
+      baseConfig: default
+    accountServiceCB:
+      baseConfig: default
+    creditServiceCB:
+      baseConfig: default
+    transactionServiceCB:
+      baseConfig: default
+
+# Logging (for debugging)
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
