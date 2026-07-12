@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: client-service
+  mongodb:
+    uri: mongodb://localhost:27017/client_db
+
+logging:
+  level:
+    root: INFO
+    com.client.service: INFO
