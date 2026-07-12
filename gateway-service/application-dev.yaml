@@ -6,13 +6,9 @@ spring:
     name: gateway-service
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
       routes:
         - id: client-service
-          uri: lb://CLIENT-SERVICE
+          uri: lb://client-service
           predicates:
             - Path=/api/v1/clients/**
           filters:
@@ -26,7 +22,7 @@ spring:
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
         - id: account-service
-          uri: lb://ACCOUNT-SERVICE
+          uri: lb://account-service
           predicates:
             - Path=/api/v1/accounts/**
           filters:
@@ -40,7 +36,7 @@ spring:
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
         - id: credit-service
-          uri: lb://CREDIT-SERVICE
+          uri: lb://credit-service
           predicates:
             - Path=/api/v1/credits/**
           filters:
@@ -54,7 +50,7 @@ spring:
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
         - id: transaction-service
-          uri: lb://TRANSACTION-SERVICE
+          uri: lb://transaction-service
           predicates:
             - Path=/api/v1/transactions/**
           filters:
