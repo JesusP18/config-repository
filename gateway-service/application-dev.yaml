@@ -5,14 +5,12 @@ spring:
   application:
     name: gateway-service
   cloud:
-    loadbalancer:
-      cache:
-        enabled: true
-      retry:
-        enabled: true
     gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
       routes:
-        # CLIENT SERVICE
         - id: client-service
           uri: lb://CLIENT-SERVICE
           predicates:
@@ -27,7 +25,6 @@ spring:
                 retries: 3
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
-        # ACCOUNT SERVICE
         - id: account-service
           uri: lb://ACCOUNT-SERVICE
           predicates:
@@ -42,7 +39,6 @@ spring:
                 retries: 3
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
-        # CREDIT SERVICE
         - id: credit-service
           uri: lb://CREDIT-SERVICE
           predicates:
@@ -57,7 +53,6 @@ spring:
                 retries: 3
                 statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                 methods: GET,POST,PUT,DELETE,PATCH
-        # TRANSACTION SERVICE
         - id: transaction-service
           uri: lb://TRANSACTION-SERVICE
           predicates:
@@ -80,7 +75,6 @@ eureka:
   instance:
     prefer-ip-address: true
 
-# Configuración de Circuit Breaker (Resilience4j)
 resilience4j:
   circuitbreaker:
     configs:
@@ -93,7 +87,7 @@ resilience4j:
         minimum-number-of-calls: 5
         automatic-transition-from-open-to-half-open-enabled: true
         slow-call-rate-threshold: 50
-        slow-call-duration-threshold: 2s  # Timeout de 2 segundos
+        slow-call-duration-threshold: 2s
     instances:
       clientServiceCB:
         base-config: default
@@ -107,7 +101,7 @@ resilience4j:
   timelimiter:
     configs:
       default:
-        timeout-duration: 2s  #  Timeout de 2 segundos
+        timeout-duration: 2s
 
   retry:
     configs:
@@ -118,7 +112,6 @@ resilience4j:
           - java.util.concurrent.TimeoutException
           - org.springframework.web.client.HttpServerErrorException
 
-# Actuator endpoints para monitoreo
 management:
   endpoints:
     web:
@@ -133,3 +126,4 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty.http.client: DEBUG
     io.github.resilience4j: DEBUG
+    org.springframework.cloud.loadbalancer: DEBUG
