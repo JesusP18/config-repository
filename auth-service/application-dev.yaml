@@ -1,0 +1,24 @@
+port: 8084
+
+spring:
+  application:
+    name: auth-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/auth_db
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:miClaveSecretaMuyLargaParaFirmaDeJWT256Bits}
+    expirationMs: 3600000  # 1 hora
+
+logging:
+  level:
+    com.auth.service: DEBUG
