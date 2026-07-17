@@ -16,8 +16,8 @@ eureka:
 
 app:
   jwt:
-    secret: ${JWT_SECRET:miClaveSecretaMuyLargaParaFirmaDeJWT256Bits}
-    expirationMs: 3600000  # 1 hora
+    secret: ${JWT_SECRET:miClaveSecretaMuyLargaParaFirmaDeJWT256BitsQueDebeTenerAlMenos32Caracteres}
+    expirationMs: 86400000  # 24 horas
 
 logging:
   level:
