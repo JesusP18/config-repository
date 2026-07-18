@@ -1,4 +1,5 @@
-port: 8084
+application:
+  port: 8084
 
 spring:
   application:
