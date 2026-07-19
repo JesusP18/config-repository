@@ -98,6 +98,21 @@ spring:
                     statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
                     methods: GET,POST,PUT,DELETE,PATCH
 
+            - id: yanki-service
+              uri: lb://YANKI-SERVICE
+              predicates:
+                - Path=/api/v1/yanki/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: yankiServiceCB
+                    fallbackUri: forward:/fallback/yanki
+                - name: Retry
+                  args:
+                    retries: 3
+                    statuses: INTERNAL_SERVER_ERROR, SERVICE_UNAVAILABLE
+                    methods: GET,POST,PUT,DELETE,PATCH
+
 eureka:
   client:
     service-url:
@@ -131,6 +146,8 @@ resilience4j:
       transactionServiceCB:
         base-config: default
       debitCardServiceCB:
+        base-config: default
+      yankiServiceCB:
         base-config: default
 
   timelimiter:
