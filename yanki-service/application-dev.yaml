@@ -1,0 +1,36 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: yanki-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/yanki_db
+      auto-index-creation: true
+  cloud:
+    stream:
+      bindings:
+        # Consumidor de respuestas de account-service
+        yankiPaymentResponseConsumer-in-0:
+          destination: yanki-payment-responses
+          group: yanki-service-group
+        # Productor de solicitudes de pago a account-service
+        yankiPaymentRequestProducer-out-0:
+          destination: yanki-payment-requests
+      kafka:
+        binder:
+          brokers: localhost:9092
+          auto-create-topics: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+
+logging:
+  level:
+    com.yanki.service: DEBUG
+    org.springframework.cloud.stream: DEBUG

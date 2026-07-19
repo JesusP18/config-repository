@@ -17,11 +17,6 @@ eureka:
   instance:
     prefer-ip-address: true
 
-app:
-  encryption:
-    password: ${ENC_PASSWORD:mySecretPassword}
-    salt: ${ENC_SALT:mySecretSalt}
-
 logging:
   level:
     com.debit.card.service: DEBUG
