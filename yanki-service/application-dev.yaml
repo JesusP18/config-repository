@@ -11,13 +11,11 @@ spring:
   cloud:
     stream:
       bindings:
-        # Consumidor de respuestas de account-service
+        yankiPaymentRequestProducer-out-0:
+          destination: yanki-payment-requests
         yankiPaymentResponseConsumer-in-0:
           destination: yanki-payment-responses
           group: yanki-service-group
-        # Productor de solicitudes de pago a account-service
-        yankiPaymentRequestProducer-out-0:
-          destination: yanki-payment-requests
       kafka:
         binder:
           brokers: localhost:9092
@@ -34,3 +32,10 @@ logging:
   level:
     com.yanki.service: DEBUG
     org.springframework.cloud.stream: DEBUG
+    org.springframework.kafka: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
