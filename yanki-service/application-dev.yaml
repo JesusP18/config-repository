@@ -4,10 +4,8 @@ server:
 spring:
   application:
     name: yanki-service
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/yanki_db
-      auto-index-creation: true
+  mongodb:
+    uri: mongodb://localhost:27017/yanki_db
   cloud:
     stream:
       bindings:
